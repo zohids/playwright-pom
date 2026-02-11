@@ -1,6 +1,9 @@
 import { test, expect } from '@playwright/test';
 import { RegisterPage } from '../pages/RegisterPage';
 import { faker } from '@faker-js/faker'
+import path from 'path';
+
+const authFile = path.join(__dirname, '../playwright/.auth/user.json');
 
 test('Register at the bank', async ({ page }) => {
   const MAX_RETRIES = 3
@@ -18,6 +21,7 @@ test('Register at the bank', async ({ page }) => {
       continue;
     }
     await registerPage.verifyAccountCreation(username)
+    await page.context().storageState({ path: authFile });
     break;
   }
 });
